@@ -222,17 +222,17 @@ def analyze(core_structure: CoreStructure, filename = ""):
             current_agg_obj['count'] += 1
         aggregated_dict[_key] = current_agg_obj
     
-    preds = test(is_dos, gnb_model)
+    # preds = test(is_dos, gnb_model)
     dos_attacks = []
 
-    for pred, tcp in zip(preds, is_dos):
-        if pred in [2, 3]:
-            dos_attacks.append((tcp['ip']['source_address'], tcp['ip']['destination_address'], "Syn-Ack Attack"))
-        elif pred == 1:
-            dos_attacks.append((tcp['ip']['source_address'], tcp['ip']['destination_address'], "RST Attack"))
+    # for pred, tcp in zip(preds, is_dos):
+    #     if pred in [2, 3]:
+    #         dos_attacks.append((tcp['ip']['source_address'], tcp['ip']['destination_address'], "Syn-Ack Attack"))
+    #     elif pred == 1:
+    #         dos_attacks.append((tcp['ip']['source_address'], tcp['ip']['destination_address'], "RST Attack"))
     
-    for rst in rst_attack:
-        dos_attacks.append((rst[0], rst[1], "RST Attack "))
+    # for rst in rst_attack:
+    #     dos_attacks.append((rst[0], rst[1], "RST Attack "))
     # PASS TO MODEL
     # GNB
     # Syn-Ack = [2, 3], RST = 1

@@ -217,6 +217,7 @@ class TCPSegment:
     unintended_connection = False
     min_length = 0.0
     flags=[]
+    payload = None
 
     def __init__(self, raw_data):
         self.reception_timestamps = []
@@ -238,6 +239,7 @@ class TCPSegment:
         self.transmission_timestamps.append(float(raw_data.time))
         self.flags=[]
         self.flags.append(raw_data['TCP'].flags)
+        self.payload = [bytes(raw_data['TCP'].payload)]
 
     def count_flags(self):
         counts = [0] * 8
@@ -272,6 +274,7 @@ class TCPSegment:
         #raw_data['TCP'].sprintf("%TCP.flags%")
         self.flags.append(flags)
         self.min_length = min(self.min_length, len(raw_data))
+        self.payload += [bytes(raw_data['TCP'].payload)]
         if flags & tcp_flags['FIN'] or flags & tcp_flags['RST']:
             # If the connection is Resetted or Finished we will no longer update the download/upload
             self.connection_finished = True 
@@ -357,6 +360,7 @@ class TCPSegment:
             'URG_Flag_Count': int(counts[5] == (len(self.fwd_packets) + len(self.bkwd_packets))),
             'ECE_Flag_Count': int(counts[6] == (len(self.fwd_packets) + len(self.bkwd_packets))),
             'CWE_Flag_Count': int(counts[7] == (len(self.fwd_packets) + len(self.bkwd_packets))), 
+            'payload': self.payload
             #'flags': self.flags,
         }
 
