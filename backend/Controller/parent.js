@@ -28,7 +28,7 @@ export const signIn = async (req, res) => {
 
 export const signUp = async (req, res) => {
 
-    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     try {
         // const validate = await verifyEmail(email);
         if (true) {
@@ -36,11 +36,6 @@ export const signUp = async (req, res) => {
                 if (_user) {
                     return res.status(403).json("User with EmailId already exist")
                 } else {
-                    if (password !== confirmPassword) {
-                        return res.status(403).json({ message: "Passwords does not match" })
-                    }
-
-
                     const hashedPassword = await bcrypt.hash(password, 12);
                     const newUser = new Parent({ email, firstName, lastName, password: hashedPassword })
                     await newUser.save();
