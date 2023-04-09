@@ -36,11 +36,52 @@ import SoftTypography from "components/SoftTypography";
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
 import borders from "assets/theme/base/borders";
+import Child from "layouts/tables/data/Child";
+import SoftBadge from "components/SoftBadge";
+// Images
+import team2 from "assets/images/team-2.jpg";
+import team3 from "assets/images/team-3.jpg";
+import team4 from "assets/images/team-4.jpg";
+import girl from "assets/images/girl.jpg";
+import boy from "assets/images/boy.jpg";
 
-function Table({ columns, rows }) {
+
+import { Author } from "layouts/tables/data/authorsTableData";
+import { Function } from "layouts/tables/data/authorsTableData";
+function Table() {
   const { light } = colors;
   const { size, fontWeightBold } = typography;
   const { borderWidth } = borders;
+  const childs = Child();
+
+  const columns = [
+    { name: "Name", align: "left" },
+    { name: "Website", align: "left" },
+    { name: "Block", align: "center" },
+    { name: "Suggested", align: "center" },
+  ]
+  const rows = childs.map((child, i) => (
+    child.visits.map((visit, j) => (
+      {
+        Name: <Author image={child.gender === "male" ? boy : girl} name={child.firstName} age={child?.age || 10} />,
+        Website: <Function job={visit.url} />,
+        Block: (
+          visit.isblocked ? (
+            <SoftBadge variant="gradient" badgeContent="Block" color="success" size="xs" container />
+          ) : (
+            <SoftBadge variant="gradient" badgeContent="Not-Block" color="error" size="xs" container />
+          )
+        ),
+        Suggested: (
+          <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+            {visit.suggestBlocked ? "Yes" : "No"}
+          </SoftTypography>
+        ),
+      }
+    ))
+  ))
+
+  console.log(rows[0])
 
   const renderColumns = columns.map(({ name, align, width }, key) => {
     let pl;
@@ -78,7 +119,7 @@ function Table({ columns, rows }) {
     );
   });
 
-  const renderRows = rows.map((row, key) => {
+  const renderRows = rows[0]?.map((row, key) => {
     const rowKey = `row-${key}`;
 
     const tableRow = columns.map(({ name, align }) => {
@@ -144,16 +185,5 @@ function Table({ columns, rows }) {
   );
 }
 
-// Setting default values for the props of Table
-Table.defaultProps = {
-  columns: [],
-  rows: [{}],
-};
-
-// Typechecking props for the Table
-Table.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.object),
-  rows: PropTypes.arrayOf(PropTypes.object),
-};
 
 export default Table;

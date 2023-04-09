@@ -15,7 +15,7 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import Card from "@mui/material/Card";
-
+import { useState, useEffect } from "react";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -27,13 +27,18 @@ import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 
-function Tables() {
-  const { columns, rows } = authorsTableData;
-  const { columns: prCols, rows: prRows } = projectsTableData;
 
+function Tables() {
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile"))?.user)
+  const { columns: prCols, rows: prRows } = projectsTableData;
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile"))?.user)
+    if (!user) {
+      navigate("/signIn")
+    }
+  }, [])
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -53,11 +58,11 @@ function Tables() {
                 },
               }}
             >
-              <Table columns={columns} rows={rows} />
+              <Table />
             </SoftBox>
           </Card>
         </SoftBox>
-        <Card>
+        {/* <Card>
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
             <SoftTypography variant="h6">Projects table</SoftTypography>
           </SoftBox>
@@ -73,7 +78,7 @@ function Tables() {
           >
             <Table columns={prCols} rows={prRows} />
           </SoftBox>
-        </Card>
+        </Card> */}
       </SoftBox>
       <Footer />
     </DashboardLayout>
