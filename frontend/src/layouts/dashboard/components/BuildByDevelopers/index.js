@@ -13,10 +13,15 @@ import SoftTypography from "components/SoftTypography";
 import wavesWhite from "assets/images/shapes/waves-white.svg";
 import rocketWhite from "assets/images/illustrations/rocket-white.png";
 import girl from "assets/images/girl.jpg";
-import boy from "assets/images/boy.jpg"
+import boy from "assets/images/boy.jpg";
+import { useNavigate } from "react-router-dom";
 
 
-function BuildByDevelopers({ i, firstName, lastName, gender, age }) {
+function BuildByDevelopers({ i, firstName, lastName, gender, age, id }) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/dashboard/children/${id}`)
+  }
   return (
     <Card>
       <SoftBox p={2}>
@@ -65,6 +70,7 @@ function BuildByDevelopers({ i, firstName, lastName, gender, age }) {
                     transform: `translate(6px, -0.5px)`,
                   },
                 }}
+                onClick={handleClick}
               >
                 Show More
                 <Icon sx={{ fontWeight: "bold" }}>arrow_forward</Icon>
@@ -112,7 +118,8 @@ BuildByDevelopers.propTypes = {
   firstName: PropTypes.string,
   lastName: PropTypes.string,
   age: PropTypes.number,
-  gender: PropTypes.string
+  gender: PropTypes.string,
+  id: PropTypes.string
 }
 
 export default BuildByDevelopers;
