@@ -127,14 +127,31 @@ def check_url():
     
     data = request.json
     url = data["url"]
+    inappropriate=False
+    slur=False
     
     parent=Parents.objects(_id=ObjectId(data["parent"])).first()
     child=Childrens.objects(_id=ObjectId(data["child"])).first()
 
     blocked_list = read_file_into_list(f)
-
+    given_block=child["blockedWebsites"]
+    for l in given_block:
+      blocked_list.append(l)
     
+    print(blocked_list)
     blocked = is_in_blocked_list(url, blocked_list)
+    
+    if blocked:
+      visit = Visits(url=url,isblocked=blocked,suggestBlocked=(inappropriate or slur),childrens=ObjectId(data["child"])).save()
+      activity = Activity.objects(parent=ObjectId(data["parent"]),child=ObjectId(data["child"])).first()
+      if activity is None:
+        Activity(parent=ObjectId(data["parent"]),child=ObjectId(data["child"]),visits=[visit.pk]).save()
+      else:
+        print(activity)
+        existing_visits=activity["visits"]  
+        existing_visits.append(visit.pk)
+        Activity.objects(parent=ObjectId(data["parent"]),child=ObjectId(data["child"])).update_one(visits=existing_visits)
+      return jsonify(False)
     
     inappropriate = image_parser(url)
     
@@ -149,15 +166,11 @@ def check_url():
     else:
       print(activity)
       existing_visits=activity["visits"]  
-      existing_visits.append(vision)
-      Activity(parent=ObjectId(data["parent"]),child=ObjectId(data["child"])).update_one(
+      existing_visits.append(visit.pk)
+      Activity.objects(parent=ObjectId(data["parent"]),child=ObjectId(data["child"])).update_one(
         visits=existing_visits
       )
      
-      
-      
-    if blocked:  
-      return jsonify(False)
     
     # safe=check_safe_browsing(url)
     
