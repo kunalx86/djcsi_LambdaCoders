@@ -1,11 +1,12 @@
 from scapy.all import *
+import requests
 from packetenizer.core import CoreStructure
 from packetenizer.repeated_timer import RepeatedTimer
 from packetenizer.helper.analyzer import analyze
 
 core_structure = CoreStructure()
 
-cap = sniff(iface="eth0", prn=lambda x : core_structure.start(x), store=0)
+cap = sniff(iface="en0", prn=lambda x : core_structure.start(x), store=0)
 
 network_map = {
     "id": "123.123.13.13"
@@ -32,7 +33,16 @@ def test():
         print(payload)
 
         ## Make request for tracking that uses dest_addr
-
-        ## Check for content allowance 
+        response = requests.post("http://localhost:5000/filter/checkurl", {
+            "url": "https://google.com",
+            "parent": "64312bf5273fe0519c501835",
+            "child": "6431a352b841ac888899d75d"
+        })
+        print(response.content)
+        ## Check for content allowance
+        response = requests.post("http://localhost:5000/filter/content", {
+            "content": "".join(payload)
+        })
+        print(response.content)
 
 RepeatedTimer(5, test)

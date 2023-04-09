@@ -92,6 +92,10 @@ def nlp_website(url):
 
     content = response.content
 
+@filter.route("/content", methods=["POST"])
+def nlp():
+    data = request.json
+    content = data["content"]
     # Initialize the Natural Language API client
     client = language_v1.LanguageServiceClient()
 
@@ -114,10 +118,10 @@ def nlp_website(url):
 
     # Check if the sentiment score is below a certain threshold
     if sentiment < -0.5:
-        return True
+        return jsonify(success=True)
 
     # If no sensitive content is detected, return False
-    return False
+    return jsonify(success=False)
 
 @filter.route("/checkurl", methods=["POST"])
 def check_url():
@@ -157,16 +161,16 @@ def check_url():
       
       
     if blocked:  
-      return jsonify(False)
+      return jsonify(success=False)
     
     # safe=check_safe_browsing(url)
     
     
     # put information in mongo along with details
     if not inappropriate and not slur:
-      return jsonify(True)
+      return jsonify(success=True)
     else:
-      return jsonify(False)
+      return jsonify(success=False)
   
     
     
