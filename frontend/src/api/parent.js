@@ -25,3 +25,7 @@ export const getChildren = async (childId) => {
 export const updateChildren = async (childId, data) => {
     return await API.post(`/parent/updateChildren/${childId}`, data);
 }
+
+export const getVisits = async (userId) => {
+    return await API.get(`/parent/getVisits/${userId}`);
+}

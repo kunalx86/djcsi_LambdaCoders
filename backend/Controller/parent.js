@@ -130,7 +130,26 @@ export const getVisites = async (req, res) => {
 
         await mongoose.connect(process.env.MONGO)
         await Parent.findById(userId).then(async (parent) => {
-            const response = await mongoose.connection.db.collection("visits").find({ childrens: { $in: parent.childrens } }).toArray();
+            const response = await Children.aggregate([
+                {
+                    $match: {
+                        parent: parent._id
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "visits",
+                        localField: "_id",
+                        foreignField: "childrens",
+                        as: "visits"
+                    }
+                },
+                {
+                    $match: {
+                        visits: { $ne: [] } // Filter out documents with an empty visits array
+                    }
+                }
+            ])
             return res.status(203).json(response)
         })
 
