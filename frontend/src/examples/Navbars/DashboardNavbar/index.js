@@ -106,7 +106,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseMenu = () => setOpenMenu(false);
 
   const handleLogOut = () => {
-
+    localStorage.removeItem("profile")
+    window.location.replace("/signIn")
   }
   // Render the notifications menu
   const renderMenu = () => (

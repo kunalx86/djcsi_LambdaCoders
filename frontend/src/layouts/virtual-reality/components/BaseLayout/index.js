@@ -83,7 +83,7 @@ function BaseLayout({ children }) {
         <SoftBox display={{ xs: "block", lg: "none" }}>
           <Sidenav
             brand={brand}
-            brandName="Soft UI Dashboard PRO"
+            brandName="Net Nanny"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -94,7 +94,7 @@ function BaseLayout({ children }) {
             <Sidenav
               color={sidenavColor}
               brand={brand}
-              brandName="Soft UI Dashboard PRO"
+              brandName="Net Nanny"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
